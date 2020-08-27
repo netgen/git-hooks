@@ -1,0 +1,33 @@
+{
+    "name": "netgen/git-hooks",
+    "description": "Various git hooks used by Netgen websites",
+    "license": "MIT",
+    "keywords": [
+        "git",
+        "captainhook",
+        "netgen"
+    ],
+    "homepage": "https://github.com/netgen/git-hooks",
+    "authors": [
+        {
+            "name": "Netgen",
+            "homepage": "https://netgen.io"
+        }
+    ],
+    "require": {
+        "captainhook/captainhook": "^5.3"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Netgen\\GitHooks\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
