@@ -26,13 +26,13 @@ final class CheckForBlockedWords extends Action
         $filesArguments = implode(' ', $files);
 
         $blockedKeywords = $action->getOptions()->get('keyword_blocklist');
-        $blockedarguments = implode('|', $blockedKeywords);
+        $blockedArguments = implode('|', $blockedKeywords);
 
         $process = new Process(
             [
                 'grep',
                 '-iwnHE',
-                $blockedarguments,
+                $blockedArguments,
                 $filesArguments,
             ]
         );
