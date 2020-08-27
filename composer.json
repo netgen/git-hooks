@@ -1,6 +1,7 @@
 {
     "name": "netgen/git-hooks",
     "description": "Various git hooks used by Netgen websites",
+    "type": "composer-plugin",
     "license": "MIT",
     "keywords": [
         "git",
@@ -15,7 +16,9 @@
         }
     ],
     "require": {
-        "captainhook/captainhook": "^5.3"
+        "composer-plugin-api": "^1.1 || ^2.0",
+        "captainhook/captainhook": "^5.3",
+        "symfony/process": "^3.4 || ^5.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16"
@@ -26,6 +29,7 @@
         }
     },
     "extra": {
+        "class": "Netgen\\GitHooks\\Composer\\InstallHooksPlugin",
         "branch-alias": {
             "dev-master": "1.0.x-dev"
         }
