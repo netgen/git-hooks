@@ -40,7 +40,7 @@ final class PHPCSFixer extends Action
         }
     }
 
-    protected function shouldSkipFileCheck($file, $allowedList): bool
+    protected function shouldSkipFileCheck(string $file, array $allowedList): bool
     {
         foreach ($allowedList as $allowedFile) {
             // File definition using regexp
