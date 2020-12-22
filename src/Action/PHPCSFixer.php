@@ -51,6 +51,7 @@ final class PHPCSFixer extends Action
 
                 continue;
             }
+
             if ($allowedFile === $file) {
                 return true;
             }
