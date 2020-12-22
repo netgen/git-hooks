@@ -47,7 +47,7 @@ final class CheckForBlockedWords extends Action
 
     private function getChangedFiles(Config\Action $action, Repository $repository): array
     {
-        $allowedFiles = $action->getOptions()->get('allowed_files');
+        $excludedFiles = $action->getOptions()->get('excluded_files');
         $extensions = $action->getOptions()->get('extensions', ['php', 'twig']);
 
         $changedFiles = [];
@@ -55,6 +55,6 @@ final class CheckForBlockedWords extends Action
             $changedFiles = array_merge($changedFiles, $repository->getIndexOperator()->getStagedFilesOfType($extension));
         }
 
-        return array_diff($changedFiles, $allowedFiles);
+        return array_diff($changedFiles, $excludedFiles);
     }
 }

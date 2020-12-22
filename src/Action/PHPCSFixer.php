@@ -22,11 +22,11 @@ final class PHPCSFixer extends Action
             return;
         }
 
-        $allowedFiles = $action->getOptions()->get('allowed_files');
+        $excludedFiles = $action->getOptions()->get('excluded_files');
 
         $io->write('Running php-cs-fixer on files:', true, IO::VERBOSE);
         foreach ($changedPHPFiles as $file) {
-            if ($this->shouldSkipFileCheck($file, $allowedFiles)) {
+            if ($this->shouldSkipFileCheck($file, $excludedFiles)) {
                 continue;
             }
 
@@ -40,18 +40,18 @@ final class PHPCSFixer extends Action
         }
     }
 
-    protected function shouldSkipFileCheck(string $file, array $allowedList): bool
+    protected function shouldSkipFileCheck(string $file, array $excludedFiles): bool
     {
-        foreach ($allowedList as $allowedFile) {
+        foreach ($excludedFiles as $excludedFile) {
             // File definition using regexp
-            if ($allowedFile[0] === '/') {
-                if (preg_match($allowedFile, $file)) {
+            if ($excludedFile[0] === '/') {
+                if (preg_match($excludedFile, $file)) {
                     return true;
                 }
 
                 continue;
             }
-            if ($allowedFile === $file) {
+            if ($excludedFile === $file) {
                 return true;
             }
         }
