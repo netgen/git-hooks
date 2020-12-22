@@ -9,6 +9,7 @@ use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Cli\Processor\ProcOpen as Processor;
 use SebastianFeldmann\Git\Repository;
 use function escapeshellarg;
+use function preg_match;
 
 final class PHPCSFixer extends Action
 {
@@ -21,8 +22,14 @@ final class PHPCSFixer extends Action
             return;
         }
 
+        $allowedFiles = $action->getOptions()->get('allowed_files');
+
         $io->write('Running php-cs-fixer on files:', true, IO::VERBOSE);
         foreach ($changedPHPFiles as $file) {
+            if ($this->shouldSkipFileCheck($file, $allowedFiles)) {
+                continue;
+            }
+
             $result = $this->fixFile($file);
 
             $io->write($result['output'], true);
@@ -31,6 +38,25 @@ final class PHPCSFixer extends Action
                 $this->throwError($action, $io);
             }
         }
+    }
+
+    protected function shouldSkipFileCheck(string $file, array $allowedList): bool
+    {
+        foreach ($allowedList as $allowedFile) {
+            // File definition using regexp
+            if ($allowedFile[0] === '/') {
+                if (preg_match($allowedFile, $file)) {
+                    return true;
+                }
+
+                continue;
+            }
+            if ($allowedFile === $file) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function fixFile($file): array
