@@ -23,7 +23,7 @@ final class CheckAssetsAction extends Action
             return;
         }
 
-        if ($this->allowedOnly($changedSassFiles, $changedJSFiles, $action)) {
+        if ($this->allChangedFilesExcluded($changedSassFiles, $changedJSFiles, $action)) {
             return;
         }
 
@@ -41,18 +41,18 @@ final class CheckAssetsAction extends Action
         }
     }
 
-    private function allowedOnly(array $changedSassFiles, array $changedJSFiles, Config\Action $action): bool
+    private function allChangedFilesExcluded(array $changedSassFiles, array $changedJSFiles, Config\Action $action): bool
     {
-        $allowList = $action->getOptions()->get('allowlist');
+        $excludedFiles = $action->getOptions()->get('excluded_files');
 
         foreach ($changedSassFiles as $changedSassFile) {
-            if (!in_array($changedSassFile, $allowList, true)) {
+            if (!in_array($changedSassFile, $excludedFiles, true)) {
                 return false;
             }
         }
 
         foreach ($changedJSFiles as $changedJSFile) {
-            if (!in_array($changedJSFile, $allowList, true)) {
+            if (!in_array($changedJSFile, $excludedFiles, true)) {
                 return false;
             }
         }
