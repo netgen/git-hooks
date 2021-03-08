@@ -10,6 +10,7 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use function file_exists;
 use function getcwd;
@@ -59,9 +60,12 @@ final class InstallHooksPlugin implements PluginInterface, EventSubscriberInterf
 
     private function runInstallCommand(): void
     {
+        $phpFinder = new PhpExecutableFinder();
+        $php = $phpFinder->find();
+
         $process = new Process(
             [
-                'php',
+                $php,
                 'bin/captainhook',
                 'install',
                 '--force',
