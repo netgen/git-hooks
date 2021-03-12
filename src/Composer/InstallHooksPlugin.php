@@ -63,10 +63,13 @@ final class InstallHooksPlugin implements PluginInterface, EventSubscriberInterf
         $phpFinder = new PhpExecutableFinder();
         $php = $phpFinder->find();
 
+        $binFolder = $this->composer->getConfig()->get('bin-dir');
+        $captainHookExecutable = $binFolder . '/' . 'captainhook';
+
         $process = new Process(
             [
                 $php,
-                'bin/captainhook',
+                $captainHookExecutable,
                 'install',
                 '--force',
                 $this->io->isDecorated() ? '--ansi' : '--no-ansi',
