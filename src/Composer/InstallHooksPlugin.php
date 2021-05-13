@@ -73,13 +73,13 @@ final class InstallHooksPlugin implements PluginInterface, EventSubscriberInterf
                 'install',
                 '--force',
                 $this->io->isDecorated() ? '--ansi' : '--no-ansi',
-            ]
+            ],
         );
 
         $process->run(
             function ($type, $line) {
                 $this->io->write($line, false);
-            }
+            },
         );
     }
 

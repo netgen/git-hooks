@@ -34,7 +34,7 @@ final class CheckForBlockedWords extends Action
                 '-iwnHE',
                 $blockedArguments,
                 $filesArguments,
-            ]
+            ],
         );
 
         $process->run();
