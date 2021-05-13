@@ -9,7 +9,6 @@ use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Git\Repository;
 use Symfony\Component\Process\Process;
 use function array_diff;
-use function array_merge;
 use function implode;
 
 final class CheckForBlockedWords extends Action
@@ -52,7 +51,7 @@ final class CheckForBlockedWords extends Action
 
         $changedFiles = [];
         foreach ($extensions as $extension) {
-            $changedFiles = array_merge($changedFiles, $repository->getIndexOperator()->getStagedFilesOfType($extension));
+            $changedFiles = [...$changedFiles, ...$repository->getIndexOperator()->getStagedFilesOfType($extension)];
         }
 
         return array_diff($changedFiles, $excludedFiles);

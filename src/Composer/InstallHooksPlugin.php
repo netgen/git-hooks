@@ -17,15 +17,9 @@ use function getcwd;
 
 final class InstallHooksPlugin implements PluginInterface, EventSubscriberInterface
 {
-    /**
-     * @var \Composer\Composer
-     */
-    private $composer;
+    private Composer $composer;
 
-    /**
-     * @var \Composer\IO\IOInterface
-     */
-    private $io;
+    private IOInterface $io;
 
     public function activate(Composer $composer, IOInterface $io): void
     {

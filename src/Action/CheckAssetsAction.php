@@ -13,7 +13,7 @@ use function mb_strpos;
 
 final class CheckAssetsAction extends Action
 {
-    protected $defaultErrorMessage = "I'm sorry, Dave. I'm afraid I can't do that. Please build production assets before committing changes";
+    protected string $defaultErrorMessage = "I'm sorry, Dave. I'm afraid I can't do that. Please build production assets before committing changes";
 
     protected function doExecute(Config $config, IO $io, Repository $repository, Config\Action $action): void
     {
