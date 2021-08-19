@@ -37,6 +37,7 @@ final class CheckForBlockedWords extends Action
         );
 
         $process->run();
+        $process->wait();
 
         if ($process->getOutput()) {
             $io->writeError("<error>{$process->getOutput()}</error>");
