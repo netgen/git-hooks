@@ -30,7 +30,7 @@ final class PHPCSFixer extends Action
                 continue;
             }
 
-            $result = $this->fixFile($file);
+            $result = $this->fixFile($file, $config, $action);
 
             $io->write($result['output'], true);
 
@@ -59,11 +59,10 @@ final class PHPCSFixer extends Action
         return false;
     }
 
-    protected function fixFile($file): array
+    protected function fixFile(string $file, Config $config, Config\Action $action): array
     {
         $process = new Processor();
-        $result = $process->run('php-cs-fixer fix --dry-run --diff ' . escapeshellarg($file));
-        $process->wait();
+        $result = $process->run($config->getPhpPath() . ' ' . $action->getOptions()->get('fixer_path') . ' fix --dry-run --diff ' . escapeshellarg($file));
 
         return [
             'success' => $result->isSuccessful(),
