@@ -62,7 +62,8 @@ final class PHPCSFixer extends Action
     protected function fixFile($file): array
     {
         $process = new Processor();
-        $result = $process->run('php-cs-fixer fix --dry-run --diff ' . escapeshellarg($file));
+	$result = $process->run('php-cs-fixer fix --dry-run --diff ' . escapeshellarg($file));
+	$process->wait();
 
         return [
             'success' => $result->isSuccessful(),
