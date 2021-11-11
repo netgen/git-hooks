@@ -22,19 +22,19 @@ final class CheckForBlockedWords extends Action
             return;
         }
 
-        $filesArguments = implode(' ', $files);
-
         $blockedKeywords = $action->getOptions()->get('keyword_blocklist');
         $blockedArguments = implode('|', $blockedKeywords);
 
-        $process = new Process(
+        $arguments = array_merge(
             [
                 'grep',
                 '-iwnHE',
                 $blockedArguments,
-                $filesArguments,
             ],
+            $files
         );
+
+        $process = new Process($arguments);
 
         $process->run();
         $process->wait();
