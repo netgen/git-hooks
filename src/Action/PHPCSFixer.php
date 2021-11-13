@@ -62,7 +62,10 @@ final class PHPCSFixer extends Action
     protected function fixFile(string $file, Config $config, Config\Action $action): array
     {
         $process = new Processor();
-        $result = $process->run($config->getPhpPath() . ' ' . $action->getOptions()->get('fixer_path') . ' fix --dry-run --diff ' . escapeshellarg($file));
+
+        $fixerPath = $action->getOptions()->get('fixer_path', '/usr/local/bin/php-cs-fixer');
+
+        $result = $process->run($config->getPhpPath() . ' ' . $fixerPath . ' fix --dry-run --diff ' . escapeshellarg($file));
 
         return [
             'success' => $result->isSuccessful(),
