@@ -62,7 +62,7 @@ final class PHPStan extends Action
     protected function analyzeFile(string $file, Config $config, Config\Action $action): array
     {
         $process = new Processor();
-        $phpstanPath = $action->getOptions()->get('phpstan_path') ?? 'bin/phpstan';
+        $phpstanPath = $action->getOptions()->get('phpstan_path') ?? 'vendor/bin/phpstan';
         $level = $action->getOptions()->get('level') ?? 8;
         $result = $process->run($config->getPhpPath() . ' ' . $phpstanPath . ' analyse --level='.$level. ' ' . escapeshellarg($file));
 
