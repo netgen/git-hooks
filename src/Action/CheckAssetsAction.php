@@ -11,6 +11,9 @@ use function count;
 use function in_array;
 use function mb_strpos;
 
+/**
+ * @deprecated Will be removed in 3.0, since assets are not committed to the repository any more.
+ */
 final class CheckAssetsAction extends Action
 {
     protected string $defaultErrorMessage = "I'm sorry, Dave. I'm afraid I can't do that. Please build production assets before committing changes";
