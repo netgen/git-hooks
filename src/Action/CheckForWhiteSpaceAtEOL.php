@@ -11,9 +11,9 @@ use Symfony\Component\Process\Process;
 use function array_diff;
 use function implode;
 
-final class CheckForSpacesInEOL extends Action
+final class CheckForWhiteSpaceAtEOL extends Action
 {
-    protected const ERROR_MESSAGE = 'You have spaces at EOL!';
+    protected const ERROR_MESSAGE = 'You have white spaces at EOL!';
 
     protected function doExecute(Config $config, IO $io, Repository $repository, Config\Action $action): void
     {
@@ -39,18 +39,5 @@ final class CheckForSpacesInEOL extends Action
             $io->writeError("<error>{$process->getOutput()}</error>");
             $this->throwError($action, $io);
         }
-    }
-
-    private function getChangedFiles(Config\Action $action, Repository $repository): array
-    {
-        $excludedFiles = $action->getOptions()->get('excluded_files');
-        $extensions = $action->getOptions()->get('extensions', ['php']);
-
-        $changedFiles = [];
-        foreach ($extensions as $extension) {
-            $changedFiles = [...$changedFiles, ...$repository->getIndexOperator()->getStagedFilesOfType($extension)];
-        }
-
-        return array_diff($changedFiles, $excludedFiles);
     }
 }

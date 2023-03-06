@@ -25,7 +25,7 @@ final class CheckForTabs extends Action
         $arguments = array_merge(
             [
                 'grep',
-                '\t',
+                '$\t',
             ],
             $files
         );
@@ -39,18 +39,5 @@ final class CheckForTabs extends Action
             $io->writeError("<error>{$process->getOutput()}</error>");
             $this->throwError($action, $io);
         }
-    }
-
-    private function getChangedFiles(Config\Action $action, Repository $repository): array
-    {
-        $excludedFiles = $action->getOptions()->get('excluded_files');
-        $extensions = $action->getOptions()->get('extensions', ['php']);
-
-        $changedFiles = [];
-        foreach ($extensions as $extension) {
-            $changedFiles = [...$changedFiles, ...$repository->getIndexOperator()->getStagedFilesOfType($extension)];
-        }
-
-        return array_diff($changedFiles, $excludedFiles);
     }
 }
