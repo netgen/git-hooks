@@ -25,7 +25,7 @@ final class CheckForTabs extends Action
         $arguments = array_merge(
             [
                 'grep',
-                '$\t',
+                '\t',
             ],
             $files
         );

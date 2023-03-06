@@ -13,7 +13,7 @@ use function implode;
 
 final class CheckForSpacesInEOL extends Action
 {
-    protected const ERROR_MESSAGE = 'You have unnecessary spaces in your code!';
+    protected const ERROR_MESSAGE = 'You have spaces at EOL!';
 
     protected function doExecute(Config $config, IO $io, Repository $repository, Config\Action $action): void
     {
