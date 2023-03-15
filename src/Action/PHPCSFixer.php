@@ -8,6 +8,7 @@ use CaptainHook\App\Config;
 use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Cli\Processor\ProcOpen as Processor;
 use SebastianFeldmann\Git\Repository;
+
 use function escapeshellarg;
 use function preg_match;
 

@@ -12,6 +12,7 @@ use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
+
 use function file_exists;
 use function getcwd;
 
@@ -58,7 +59,7 @@ final class InstallHooksPlugin implements PluginInterface, EventSubscriberInterf
         $php = $phpFinder->find();
 
         $binFolder = $this->composer->getConfig()->get('bin-dir');
-        $captainHookExecutable = $binFolder . '/' . 'captainhook';
+        $captainHookExecutable = $binFolder . '/captainhook';
 
         $process = new Process(
             [

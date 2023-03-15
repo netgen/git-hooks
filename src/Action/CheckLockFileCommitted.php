@@ -7,6 +7,7 @@ namespace Netgen\GitHooks\Action;
 use CaptainHook\App\Config;
 use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Git\Repository;
+
 use function in_array;
 
 final class CheckLockFileCommitted extends Action

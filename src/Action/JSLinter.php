@@ -8,6 +8,7 @@ use CaptainHook\App\Config;
 use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Cli\Processor\ProcOpen as Processor;
 use SebastianFeldmann\Git\Repository;
+
 use function escapeshellarg;
 use function preg_match;
 
@@ -65,7 +66,7 @@ final class JSLinter extends Action
     protected function lintFile(string $file, string $linterCommand, string $linterOptions): array
     {
         $process = new Processor();
-        $result = $process->run($linterCommand.' '.$linterOptions.'  '.escapeshellarg($file));
+        $result = $process->run($linterCommand . ' ' . $linterOptions . '  ' . escapeshellarg($file));
 
         return [
             'success' => $result->isSuccessful(),

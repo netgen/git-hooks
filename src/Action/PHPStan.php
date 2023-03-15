@@ -8,6 +8,7 @@ use CaptainHook\App\Config;
 use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Cli\Processor\ProcOpen as Processor;
 use SebastianFeldmann\Git\Repository;
+
 use function escapeshellarg;
 use function preg_match;
 
@@ -64,7 +65,7 @@ final class PHPStan extends Action
         $process = new Processor();
         $phpstanPath = $action->getOptions()->get('phpstan_path') ?? 'vendor/bin/phpstan';
         $level = $action->getOptions()->get('level') ?? 8;
-        $result = $process->run($config->getPhpPath() . ' ' . $phpstanPath . ' analyse --level='.$level. ' ' . escapeshellarg($file));
+        $result = $process->run($config->getPhpPath() . ' ' . $phpstanPath . ' analyse --level=' . $level . ' ' . escapeshellarg($file));
 
         return [
             'success' => $result->isSuccessful(),

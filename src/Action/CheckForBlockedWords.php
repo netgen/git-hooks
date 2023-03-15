@@ -8,7 +8,9 @@ use CaptainHook\App\Config;
 use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Git\Repository;
 use Symfony\Component\Process\Process;
+
 use function array_diff;
+use function array_merge;
 use function implode;
 
 final class CheckForBlockedWords extends Action
@@ -31,7 +33,7 @@ final class CheckForBlockedWords extends Action
                 '-iwnHE',
                 $blockedArguments,
             ],
-            $files
+            $files,
         );
 
         $process = new Process($arguments);
