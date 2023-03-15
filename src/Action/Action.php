@@ -12,6 +12,8 @@ use CaptainHook\App\Exception\ActionFailed;
 use CaptainHook\App\Hook\Action as ActionInterface;
 use SebastianFeldmann\Git\Repository;
 
+use function sprintf;
+
 abstract class Action implements ActionInterface
 {
     protected const ERROR_MESSAGE = "I'm sorry, Dave. I'm afraid I can't do that. Please check your commit for errors";
@@ -31,7 +33,7 @@ abstract class Action implements ActionInterface
     {
         $errorMessage = $this->getErrorMessage($config->getOptions());
 
-        $io->writeError("<error>{$errorMessage}</error>");
+        $io->writeError(sprintf('<error>%s</error>', $errorMessage));
 
         throw new ActionFailed($errorMessage);
     }

@@ -10,6 +10,7 @@ use SebastianFeldmann\Git\Repository;
 
 use function count;
 use function in_array;
+use function str_contains;
 
 /**
  * @deprecated Will be removed in 3.0, since assets are not committed to the repository any more.
@@ -83,8 +84,6 @@ final class CheckAssetsAction extends Action
 
             if (str_contains($jsonFile, 'build/manifest.json')) {
                 $manifestFound = true;
-
-                continue;
             }
         }
 
@@ -97,7 +96,7 @@ final class CheckAssetsAction extends Action
      */
     private function checkCssBuildFiles(array $changedSassFiles, array $changedCssFiles): bool
     {
-        $cssBuildFound = count($changedSassFiles) > 0 ? false : true;
+        $cssBuildFound = count($changedSassFiles) === 0;
 
         foreach ($changedCssFiles as $cssFile) {
             if (str_contains($cssFile, 'build')) {
@@ -115,7 +114,7 @@ final class CheckAssetsAction extends Action
      */
     private function checkJsBuildFiles(array $changedJSFiles): bool
     {
-        $jsBuildFound = count($changedJSFiles) > 0 ? false : true;
+        $jsBuildFound = count($changedJSFiles) === 0;
         foreach ($changedJSFiles as $changedJSFile) {
             if (str_contains($changedJSFile, 'build')) {
                 $jsBuildFound = true;
