@@ -37,7 +37,7 @@ final class JSPrettier extends Action
 
             $result = $this->lintFile($file, $prettierCommand, $prettierOptions);
 
-            $io->write($result['output'], true);
+            $io->write($result['output']);
 
             if ($result['success'] !== true) {
                 $this->throwError($action, $io);

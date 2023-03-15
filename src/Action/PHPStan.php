@@ -34,7 +34,7 @@ final class PHPStan extends Action
 
             $result = $this->analyzeFile($file, $config, $action);
 
-            $io->write($result['output'], true);
+            $io->write($result['output']);
 
             if ($result['success'] !== true) {
                 $this->throwError($action, $io);
