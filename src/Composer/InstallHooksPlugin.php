@@ -72,7 +72,7 @@ final class InstallHooksPlugin implements PluginInterface, EventSubscriberInterf
         );
 
         $process->run(
-            function ($type, $line) {
+            function (string $type, string $line): void {
                 $this->io->write($line, false);
             },
         );

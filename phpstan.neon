@@ -1,0 +1,6 @@
+includes:
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+    ignoreErrors:
+        - '#Expression on left side of \?\? is always null#'

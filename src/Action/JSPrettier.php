@@ -9,6 +9,7 @@ use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Cli\Processor\ProcOpen as Processor;
 use SebastianFeldmann\Git\Repository;
 
+use function count;
 use function escapeshellarg;
 use function preg_match;
 
@@ -19,11 +20,11 @@ final class JSPrettier extends Action
     protected function doExecute(Config $config, IO $io, Repository $repository, Config\Action $action): void
     {
         $changedJsFiles = $repository->getIndexOperator()->getStagedFilesOfType('js');
-        if (empty($changedJsFiles)) {
+        if (count($changedJsFiles) === 0) {
             return;
         }
 
-        $excludedFiles = $action->getOptions()->get('excluded_files');
+        $excludedFiles = $action->getOptions()->get('excluded_files') ?? [];
 
         $prettierCommand = $action->getOptions()->get('prettier_command', 'yarn prettier');
         $prettierOptions = $action->getOptions()->get('prettier_options', '--check');
@@ -44,12 +45,15 @@ final class JSPrettier extends Action
         }
     }
 
+    /**
+     * @param string[] $excludedFiles
+     */
     protected function shouldSkipFileCheck(string $file, array $excludedFiles): bool
     {
         foreach ($excludedFiles as $excludedFile) {
             // File definition using regexp
             if ($excludedFile[0] === '/') {
-                if (preg_match($excludedFile, $file)) {
+                if (preg_match($excludedFile, $file) !== false) {
                     return true;
                 }
 
@@ -63,6 +67,9 @@ final class JSPrettier extends Action
         return false;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function lintFile(string $file, string $prettierCommand, string $prettierOptions): array
     {
         $process = new Processor();

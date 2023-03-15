@@ -45,9 +45,14 @@ final class CheckAssetsAction extends Action
         }
     }
 
+    /**
+     * @param string[] $changedSassFiles
+     * @param string[] $changedJSFiles
+     */
     private function allChangedFilesExcluded(array $changedSassFiles, array $changedJSFiles, Config\Action $action): bool
     {
-        $excludedFiles = $action->getOptions()->get('excluded_files');
+        /** @var string[] $excludedFiles */
+        $excludedFiles = $action->getOptions()->get('excluded_files') ?? [];
 
         foreach ($changedSassFiles as $changedSassFile) {
             if (!in_array($changedSassFile, $excludedFiles, true)) {
@@ -87,9 +92,13 @@ final class CheckAssetsAction extends Action
         return $entrypointFound && $manifestFound;
     }
 
+    /**
+     * @param string[] $changedSassFiles
+     * @param string[] $changedCssFiles
+     */
     private function checkCssBuildFiles(array $changedSassFiles, array $changedCssFiles): bool
     {
-        $cssBuildFound = count($changedSassFiles) ? false : true;
+        $cssBuildFound = count($changedSassFiles) > 0 ? false : true;
 
         foreach ($changedCssFiles as $cssFile) {
             if (mb_strpos($cssFile, 'build') === false) {
@@ -102,9 +111,12 @@ final class CheckAssetsAction extends Action
         return $cssBuildFound;
     }
 
+    /**
+     * @param string[] $changedJSFiles
+     */
     private function checkJsBuildFiles(array $changedJSFiles): bool
     {
-        $jsBuildFound = count($changedJSFiles) ? false : true;
+        $jsBuildFound = count($changedJSFiles) > 0 ? false : true;
         foreach ($changedJSFiles as $changedJSFile) {
             if (mb_strpos($changedJSFile, 'build') !== false) {
                 $jsBuildFound = true;

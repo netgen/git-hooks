@@ -9,6 +9,7 @@ use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Cli\Processor\ProcOpen as Processor;
 use SebastianFeldmann\Git\Repository;
 
+use function count;
 use function escapeshellarg;
 use function preg_match;
 
@@ -19,11 +20,11 @@ final class PHPCSFixer extends Action
     protected function doExecute(Config $config, IO $io, Repository $repository, Config\Action $action): void
     {
         $changedPHPFiles = $repository->getIndexOperator()->getStagedFilesOfType('php');
-        if (empty($changedPHPFiles)) {
+        if (count($changedPHPFiles) === 0) {
             return;
         }
 
-        $excludedFiles = $action->getOptions()->get('excluded_files');
+        $excludedFiles = $action->getOptions()->get('excluded_files') ?? [];
 
         $io->write('Running php-cs-fixer on files:', true, IO::VERBOSE);
         foreach ($changedPHPFiles as $file) {
@@ -41,12 +42,15 @@ final class PHPCSFixer extends Action
         }
     }
 
+    /**
+     * @param string[] $excludedFiles
+     */
     protected function shouldSkipFileCheck(string $file, array $excludedFiles): bool
     {
         foreach ($excludedFiles as $excludedFile) {
             // File definition using regexp
             if ($excludedFile[0] === '/') {
-                if (preg_match($excludedFile, $file)) {
+                if (preg_match($excludedFile, $file) !== false) {
                     return true;
                 }
 
@@ -60,6 +64,9 @@ final class PHPCSFixer extends Action
         return false;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function fixFile(string $file, Config $config, Config\Action $action): array
     {
         $process = new Processor();

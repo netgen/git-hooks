@@ -10,7 +10,7 @@ use SebastianFeldmann\Git\Repository;
 use Symfony\Component\Process\Process;
 
 use function array_diff;
-use function array_merge;
+use function count;
 use function implode;
 
 final class CheckForBlockedWords extends Action
@@ -20,36 +20,37 @@ final class CheckForBlockedWords extends Action
     protected function doExecute(Config $config, IO $io, Repository $repository, Config\Action $action): void
     {
         $files = $this->getChangedFiles($action, $repository);
-        if (empty($files)) {
+        if (count($files) === 0) {
             return;
         }
 
         $blockedKeywords = $action->getOptions()->get('keyword_blocklist');
         $blockedArguments = implode('|', $blockedKeywords);
 
-        $arguments = array_merge(
-            [
-                'grep',
-                '-iwnHE',
-                $blockedArguments,
-            ],
-            $files,
-        );
+        $arguments = [
+            'grep',
+            '-iwnHE',
+            $blockedArguments,
+            ...$files,
+        ];
 
         $process = new Process($arguments);
 
         $process->run();
         $process->wait();
 
-        if ($process->getOutput()) {
+        if ($process->getOutput() !== '') {
             $io->writeError("<error>{$process->getOutput()}</error>");
             $this->throwError($action, $io);
         }
     }
 
+    /**
+     * @return string[]
+     */
     private function getChangedFiles(Config\Action $action, Repository $repository): array
     {
-        $excludedFiles = $action->getOptions()->get('excluded_files');
+        $excludedFiles = $action->getOptions()->get('excluded_files') ?? [];
         $extensions = $action->getOptions()->get('extensions', ['php', 'twig']);
 
         $changedFiles = [];
