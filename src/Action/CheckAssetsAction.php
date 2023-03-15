@@ -10,7 +10,6 @@ use SebastianFeldmann\Git\Repository;
 
 use function count;
 use function in_array;
-use function mb_strpos;
 
 /**
  * @deprecated Will be removed in 3.0, since assets are not committed to the repository any more.
@@ -76,13 +75,13 @@ final class CheckAssetsAction extends Action
         $entrypointFound = false;
         $manifestFound = false;
         foreach ($changedJsonFiles as $jsonFile) {
-            if (mb_strpos($jsonFile, 'build/entrypoints.json') !== false) {
+            if (str_contains($jsonFile, 'build/entrypoints.json')) {
                 $entrypointFound = true;
 
                 continue;
             }
 
-            if (mb_strpos($jsonFile, 'build/manifest.json') !== false) {
+            if (str_contains($jsonFile, 'build/manifest.json')) {
                 $manifestFound = true;
 
                 continue;
@@ -101,7 +100,7 @@ final class CheckAssetsAction extends Action
         $cssBuildFound = count($changedSassFiles) > 0 ? false : true;
 
         foreach ($changedCssFiles as $cssFile) {
-            if (mb_strpos($cssFile, 'build') === false) {
+            if (str_contains($cssFile, 'build')) {
                 continue;
             }
 
@@ -118,7 +117,7 @@ final class CheckAssetsAction extends Action
     {
         $jsBuildFound = count($changedJSFiles) > 0 ? false : true;
         foreach ($changedJSFiles as $changedJSFile) {
-            if (mb_strpos($changedJSFile, 'build') !== false) {
+            if (str_contains($changedJSFile, 'build')) {
                 $jsBuildFound = true;
 
                 break;
