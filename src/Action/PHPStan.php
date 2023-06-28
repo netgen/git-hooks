@@ -50,7 +50,7 @@ final class PHPStan extends Action
         foreach ($excludedFiles as $excludedFile) {
             // File definition using regexp
             if ($excludedFile[0] === '/') {
-                if (preg_match($excludedFile, $file) !== false) {
+                if (preg_match($excludedFile, $file) === 1) {
                     return true;
                 }
 
