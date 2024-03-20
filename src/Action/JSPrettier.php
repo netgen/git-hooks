@@ -9,6 +9,7 @@ use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Cli\Processor\ProcOpen as Processor;
 use SebastianFeldmann\Git\Repository;
 
+use function array_merge;
 use function count;
 use function escapeshellarg;
 use function preg_match;
@@ -20,7 +21,7 @@ final class JSPrettier extends Action
     protected function doExecute(Config $config, IO $io, Repository $repository, Config\Action $action): void
     {
         $extensions = $action->getOptions()->get('extensions', ['js']);
-        
+
         $changedFiles = [];
         foreach ($extensions as $extension) {
             $changedFiles = array_merge($changedFiles, $repository->getIndexOperator()->getStagedFilesOfType($extension));
