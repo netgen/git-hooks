@@ -9,6 +9,7 @@ use CaptainHook\App\Console\IO;
 use SebastianFeldmann\Cli\Processor\ProcOpen as Processor;
 use SebastianFeldmann\Git\Repository;
 
+use function array_merge;
 use function count;
 use function escapeshellarg;
 use function preg_match;
@@ -19,8 +20,14 @@ final class JSLinter extends Action
 
     protected function doExecute(Config $config, IO $io, Repository $repository, Config\Action $action): void
     {
-        $changedJsFiles = $repository->getIndexOperator()->getStagedFilesOfType('js');
-        if (count($changedJsFiles) === 0) {
+        $extensions = $action->getOptions()->get('extensions', ['js']);
+
+        $changedFiles = [];
+        foreach ($extensions as $extension) {
+            $changedFiles = array_merge($changedFiles, $repository->getIndexOperator()->getStagedFilesOfType($extension));
+        }
+
+        if (count($changedFiles) === 0) {
             return;
         }
 
@@ -30,7 +37,7 @@ final class JSLinter extends Action
         $linterOptions = $action->getOptions()->get('linter_options', '--fix-dry-run');
 
         $io->write('Running linter on files:', true, IO::VERBOSE);
-        foreach ($changedJsFiles as $file) {
+        foreach ($changedFiles as $file) {
             if ($this->shouldSkipFileCheck($file, $excludedFiles)) {
                 continue;
             }
