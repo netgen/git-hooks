@@ -18,7 +18,7 @@ abstract class Action implements ActionInterface
 {
     protected const ERROR_MESSAGE = "I'm sorry, Dave. I'm afraid I can't do that. Please check your commit for errors";
 
-    public function execute(Config $config, IO $io, Repository $repository, Config\Action $action): void
+    public function execute(Config $config, IO $io, Repository $repository, ActionConfig $action): void
     {
         if (!$this->isEnabled($action)) {
             return;
@@ -27,7 +27,7 @@ abstract class Action implements ActionInterface
         $this->doExecute($config, $io, $repository, $action);
     }
 
-    abstract protected function doExecute(Config $config, IO $io, Repository $repository, Config\Action $action): void;
+    abstract protected function doExecute(Config $config, IO $io, Repository $repository, ActionConfig $action): void;
 
     protected function throwError(ActionConfig $config, IO $io): void
     {
