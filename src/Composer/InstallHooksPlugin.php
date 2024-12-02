@@ -14,6 +14,7 @@ use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use function file_exists;
 use function getcwd;
+use function implode;
 
 final class InstallHooksPlugin implements PluginInterface, EventSubscriberInterface
 {
@@ -66,7 +67,8 @@ final class InstallHooksPlugin implements PluginInterface, EventSubscriberInterf
         $binFolder = $this->composer->getConfig()->get('bin-dir');
         $captainHookExecutable = $binFolder . '/' . 'captainhook';
 
-        $process = new Process(
+        $command = implode(
+            ' ',
             [
                 $php,
                 $captainHookExecutable,
@@ -75,6 +77,8 @@ final class InstallHooksPlugin implements PluginInterface, EventSubscriberInterf
                 $this->io->isDecorated() ? '--ansi' : '--no-ansi',
             ]
         );
+
+        $process = new Process($command);
 
         $process->run(
             function ($type, $line) {
