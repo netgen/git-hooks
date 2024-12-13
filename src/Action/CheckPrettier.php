@@ -22,6 +22,7 @@ final class CheckPrettier extends Action
 
     protected function doExecute(Config $config, IO $io, Repository $repository, ActionConfig $action): void
     {
+        /** @var string|string[] $extensions */
         $extensions = $action->getOptions()->get('extensions', ['js', 'jsx', 'ts', 'tsx', 'css', 'scss']);
         $excludedFiles = $action->getOptions()->get('excluded_files') ?? [];
         $directories = $action->getOptions()->get('directories', ['assets']);
@@ -29,18 +30,29 @@ final class CheckPrettier extends Action
         $formatOptions = $action->getOptions()->get('prettier_options', '--check');
 
         $finder = new Finder();
-        $finder->in($directories)->files()->name(preg_filter('/^/', '*.', $extensions));
+        preg_filter('/^/', '*.', $extensions);
+        $finder->in($directories)->files()->name($extensions);
 
         if ($finder->hasResults()) {
-            $io->write(sprintf('Running %s on files:', $prettierCommand), true, IO::VERBOSE);
+            $io->write(sprintf('Running %s on files:', $prettierCommand));
 
             foreach ($finder as $file) {
-                if ($this->shouldSkipFileCheck($file, $excludedFiles)) {
+                if ($this->shouldSkipFileCheck($file->getPath(), $excludedFiles)) {
                     continue;
                 }
 
                 $result = $this->checkPrettier($file->getPath(), $prettierCommand, $formatOptions);
-                $io->write($result['output']);
+
+                $io->write(sprintf('<info>%s: </info>', $file->getPath()));
+
+                /** @var bool $isResultSuccess */
+                $isResultSuccess = $result['success'];
+
+                if ($isResultSuccess) {
+                    $io->write($result['output']);
+                } else {
+                    $io->writeError(sprintf('<error>%s</error>', $result['error']));
+                }
 
                 if ($result['success'] !== true) {
                     $this->throwError($action, $io);
@@ -82,6 +94,7 @@ final class CheckPrettier extends Action
         return [
             'success' => $result->isSuccessful(),
             'output' => $result->getStdOut(),
+            'error' => $result->getStdErr(),
         ];
     }
 }

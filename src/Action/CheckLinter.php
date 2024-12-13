@@ -33,6 +33,8 @@ final class CheckLinter extends Action
     }
 
     /**
+     * @param string[] $directories
+     *
      * @return array<string, mixed>
      */
     protected function checkLinter(array $directories, string $linterCommand): array
