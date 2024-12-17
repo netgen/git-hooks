@@ -47,4 +47,17 @@ abstract class Action implements ActionInterface
     {
         return $action->getOptions()->get('enabled', true);
     }
+
+    public function getChangedFiles(Config\Action $action, Repository $repository): array
+    {
+        $excludedFiles = $action->getOptions()->get('excluded_files');
+        $extensions = $action->getOptions()->get('extensions', ['php', 'twig']);
+
+        $changedFiles = [];
+        foreach ($extensions as $extension) {
+            $changedFiles = [...$changedFiles, ...$repository->getIndexOperator()->getStagedFilesOfType($extension)];
+        }
+
+        return array_diff($changedFiles, $excludedFiles);
+    }
 }
