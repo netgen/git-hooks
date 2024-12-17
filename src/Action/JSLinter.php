@@ -13,6 +13,7 @@ use function array_merge;
 use function count;
 use function escapeshellarg;
 use function preg_match;
+use function sprintf;
 
 final class JSLinter extends Action
 {
