@@ -44,9 +44,10 @@ final class JSLinter extends Action
 
             $result = $this->lintFile($file, $linterCommand, $linterOptions);
 
-            $io->write($result['output']);
-
-            if ($result['success'] !== true) {
+            if ($result['success'] === true) {
+                $io->write($result['output']);
+            } else {
+                $io->writeError(sprintf('<error>%s</error>', $result['error']));
                 $this->throwError($action, $io);
             }
         }
@@ -85,6 +86,7 @@ final class JSLinter extends Action
         return [
             'success' => $result->isSuccessful(),
             'output' => $result->getStdOut(),
+            'error' => $result->getStdErr(),
         ];
     }
 }
