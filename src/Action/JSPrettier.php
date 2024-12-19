@@ -13,6 +13,7 @@ use function array_merge;
 use function count;
 use function escapeshellarg;
 use function preg_match;
+use function sprintf;
 
 final class JSPrettier extends Action
 {
@@ -44,9 +45,10 @@ final class JSPrettier extends Action
 
             $result = $this->lintFile($file, $prettierCommand, $prettierOptions);
 
-            $io->write($result['output']);
-
-            if ($result['success'] !== true) {
+            if ($result['success'] === true) {
+                $io->write($result['output']);
+            } else {
+                $io->writeError(sprintf('<error>%s</error>', $result['error']));
                 $this->throwError($action, $io);
             }
         }
@@ -85,6 +87,7 @@ final class JSPrettier extends Action
         return [
             'success' => $result->isSuccessful(),
             'output' => $result->getStdOut(),
+            'error' => $result->getStdErr(),
         ];
     }
 }
