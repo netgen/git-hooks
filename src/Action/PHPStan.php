@@ -12,6 +12,7 @@ use SebastianFeldmann\Git\Repository;
 use function count;
 use function escapeshellarg;
 use function preg_match;
+use function str_replace;
 
 final class PHPStan extends Action
 {
@@ -70,13 +71,26 @@ final class PHPStan extends Action
     protected function analyzeFile(string $file, Config $config, Config\Action $action): array
     {
         $process = new Processor();
-        $phpstanPath = $action->getOptions()->get('phpstan_path') ?? 'vendor/bin/phpstan';
-        $level = $action->getOptions()->get('level') ?? 8;
-        $result = $process->run($config->getPhpPath() . ' ' . $phpstanPath . ' analyse --level=' . $level . ' ' . escapeshellarg($file));
+
+        $result = $process->run($this->getCommand($file, $config, $action));
 
         return [
             'success' => $result->isSuccessful(),
             'output' => $result->getStdOut(),
         ];
+    }
+
+    protected function getCommand(string $file, Config $config, Config\Action $action): string
+    {
+        $command = $action->getOptions()->get('command');
+
+        if ($command !== null) {
+            return str_replace('%file%', escapeshellarg($file), $command);
+        }
+
+        $phpstanPath = $action->getOptions()->get('phpstan_path') ?? 'vendor/bin/phpstan';
+        $level = $action->getOptions()->get('level') ?? 8;
+
+        return $config->getPhpPath() . ' ' . $phpstanPath . ' analyse --level=' . $level . ' ' . escapeshellarg($file);
     }
 }

@@ -12,6 +12,7 @@ use SebastianFeldmann\Git\Repository;
 use function count;
 use function escapeshellarg;
 use function preg_match;
+use function str_replace;
 
 final class PHPCSFixer extends Action
 {
@@ -70,11 +71,23 @@ final class PHPCSFixer extends Action
     protected function fixFile(string $file, Config $config, Config\Action $action): array
     {
         $process = new Processor();
-        $result = $process->run($config->getPhpPath() . ' ' . $action->getOptions()->get('fixer_path') . ' fix --dry-run --diff ' . escapeshellarg($file));
+
+        $result = $process->run($this->getCommand($file, $config, $action));
 
         return [
             'success' => $result->isSuccessful(),
             'output' => $result->getStdOut(),
         ];
+    }
+
+    protected function getCommand(string $file, Config $config, Config\Action $action): string
+    {
+        $command = $action->getOptions()->get('command');
+
+        if ($command !== null) {
+            return str_replace('%file%', escapeshellarg($file), $command);
+        }
+
+        return $config->getPhpPath() . ' ' . $action->getOptions()->get('fixer_path') . ' fix --dry-run --diff ' . escapeshellarg($file);
     }
 }
