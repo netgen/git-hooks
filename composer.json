@@ -19,7 +19,7 @@
         "php": "^8.4",
         "composer-plugin-api": "^2.2",
         "captainhook/captainhook": "^5.27",
-        "symfony/process": "^7.3"
+        "symfony/process": "^7.3 || ^8.0"
     },
     "require-dev": {
         "netgen/coding-standard": "^1.0",
